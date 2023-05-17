@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace属性：用于指定当前的映射文件和那个接口进行映射 ，需要指定接口的文件路径 ，需要标注包的完全路径接口  -->
+<mapper namespace="com.example.app.mapper.CommodityMapper">
+<select id="ClassifyList"  resultMap="classifyListMap">
+    SELECT c.id, c.moduleName, l.name, l.price, l.introduce, l.img_url, l.top
+    FROM wx_classification c
+    LEFT JOIN wx_classifyList l ON c.id = l.state and l.product_status != 1
+<where>
+    <if test="id != null and id !='' ">
+      and  c.id = #{id}
+    </if>
+</where>
+</select>
+    <resultMap id="classifyListMap" type="com.example.app.dto.ClassifyMapDTO">
+        <id property="id" column="id"/>
+        <result property="moduleName" column="moduleName"/>
+        <collection property="categoryList" ofType="com.example.app.dto.ClassifyListDTO">
+            <result property="name" column="name"/>
+            <result property="price" column="price"/>
+            <result property="introduce" column="introduce"/>
+            <result property="img_url" column="img_url"/>
+            <result property="top" column="top"/>
+        </collection>
+    </resultMap>
+</mapper>
